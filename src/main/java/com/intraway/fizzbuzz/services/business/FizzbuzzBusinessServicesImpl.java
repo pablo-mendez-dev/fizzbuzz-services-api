@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -192,7 +193,7 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 				description = "se encontraron múltiplos de 5";
 			}
 
-			result.setCode(String.format("%03d", 2));
+			result.setCode(getRandomIntNumber());
 			result.setDescription(description);
 			result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
 			result.setPath(path);
@@ -254,4 +255,9 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 	}
 
+	private String getRandomIntNumber() {	  
+	    Random random = new Random();
+	    int number = random.nextInt(999);
+	    return String.format("%03d", number);
+	}
 }
