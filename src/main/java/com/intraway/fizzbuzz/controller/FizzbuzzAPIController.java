@@ -44,4 +44,10 @@ public class FizzbuzzAPIController {
 	}
 	
 	
+//	@GetMapping(value = "/fizzbuzz/getAll")
+//	public ResponseEntity<Object> getAllFizzBuzz(){
+//		
+//		
+//	}
+//	
 }

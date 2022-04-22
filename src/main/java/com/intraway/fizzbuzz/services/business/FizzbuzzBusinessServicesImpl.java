@@ -116,16 +116,18 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		result.setPath(path);
 		result.setStatus(400);
 		result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
+		
+		//TODO: Persistir el estado ERROR
 
 		return result;
 	}
 
-	public void persist(OKFizzbuzzDTO okResult, List<String> aResultList) {
+	private void persist(OKFizzbuzzDTO okResult, List<String> aResultList) {
 
 		OkInvocations okInvocation = new OkInvocations();
 		okInvocation.setCode(okResult.getCode());
 		okInvocation.setDescription(okResult.getDescription());
-		
+
 		List<Results> resultList = new ArrayList<Results>();
 		Results result;
 		for (String aResult : aResultList) {
@@ -135,18 +137,16 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 			resultList.add(result);
 		}
 
-		
-	
 		okInvocation.setResults(resultList);
-		
+
 		Invocations invocation = new Invocations();
-		invocation.setCreatedTime(new Timestamp(System.currentTimeMillis()));
+		invocation.setCreatedTime(new Timestamp(System.currentTimeMillis()));//TODO: cambiar este timestamp
 		invocation.setPath(okResult.getPath());
 		invocation.setState(true);
 		invocation.setOkInvocations(okInvocation);
-		
+
 		okInvocation.setInvocations(invocation);
-		
+
 		fizzbuzzDAO.createInvocations(invocation);
 
 	}

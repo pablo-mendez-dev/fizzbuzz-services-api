@@ -1,7 +1,6 @@
 package com.intraway.fizzbuzz.domain.dto;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
@@ -21,6 +20,7 @@ public class OKFizzbuzzDTO {
 	private String description;
 	@JsonProperty("list")
 	private String list;
+	@JsonIgnore
 	private String path;
 	
 	public String getPath() {
