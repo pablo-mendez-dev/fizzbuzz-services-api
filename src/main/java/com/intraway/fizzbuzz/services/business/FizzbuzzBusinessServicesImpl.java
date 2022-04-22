@@ -16,7 +16,10 @@ import com.intraway.fizzbuzz.domain.entities.Results;
 import com.intraway.fizzbuzz.exceptions.AppBussinesException;
 import com.intraway.fizzbuzz.services.dao.FizzbuzzDAO;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 	// Inyecto los valores de constantes configuradas en el archivo de configuracion
@@ -42,19 +45,49 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 			Integer.parseInt(min);
 			Integer.parseInt(max);
 		} catch (Exception e) {
+			log.debug("Min y Max inválidos");
 			return false;
 		}
 
 		// Segundo valido que min es menor que max
-		if (Integer.parseInt(min) <= Integer.parseInt(max))
+		if (Integer.parseInt(min) <= Integer.parseInt(max)) {
+			log.debug("Min y Max válidos");
 			return true;
+		}
 
+		log.debug("Min y Max inválidos");
 		return false;
 	}
 
 	@Override
 	public OKFizzbuzzDTO getOkResult(String min, String max, String path) {
+		log.debug("Comienza ejecución de algoritmo FizzBuzz");
+		return searchFizzBuzz(min, max, path);
+	}
 
+	@Override
+	public ERRORFizzbuzzDTO getErrorResult(String path) {
+
+		ERRORFizzbuzzDTO result = new ERRORFizzbuzzDTO();
+
+		try {
+			result.setError("Bad Request");
+			result.setException("com.intraway.exceptions.badrequest");
+			result.setMessage("Los parámetros enviados son incorrectos");
+			result.setPath(path);
+			result.setStatus(400);
+			result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
+
+			persistErrorResult(path);
+
+		} catch (Exception e) {
+			throw new AppBussinesException("RUNTIME-ERROR: ", e.getMessage());
+		}
+
+		return result;
+	}
+
+	private OKFizzbuzzDTO searchFizzBuzz(String min, String max, String path) {
 		OKFizzbuzzDTO result = new OKFizzbuzzDTO();// Creo un new OKFizzbuzzDTO porque ya estan validados min y max
 
 		List<String> resultList = new ArrayList<String>();// Lista para almacenar los resultados
@@ -91,7 +124,6 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 					}
 					resultList.add("" + i);
 				}
-
 			}
 
 			if (multiple3 & multiple5) {// Si existen multiplos de los dos
@@ -110,31 +142,12 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 			persistOkResult(result, resultList);
 		} catch (Exception e) {
+			log.debug("ERROR: " + e.getMessage());
 			throw new AppBussinesException("RUNTIME-ERROR: ", e.getMessage());
 		}
-
-		return result;
-	}
-
-	@Override
-	public ERRORFizzbuzzDTO getErrorResult(String path) {
-
-		ERRORFizzbuzzDTO result = new ERRORFizzbuzzDTO();
-
-		try {
-			result.setError("Bad Request");
-			result.setException("com.intraway.exceptions.badrequest");
-			result.setMessage("Los parámetros enviados son incorrectos");
-			result.setPath(path);
-			result.setStatus(400);
-			result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
-
-			persistErrorResult(path);
-			
-		} catch (Exception e) {
-			throw new AppBussinesException("RUNTIME-ERROR: ", e.getMessage());
-		}
-
+		
+		log.debug("Termina ejecución algoritmo de búsqueda de FizzBuzz");
+		
 		return result;
 	}
 
@@ -164,8 +177,8 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		okInvocation.setInvocations(invocation);
 
 		fizzbuzzDAO.createInvocations(invocation);
-
-		invocation.getIdInvocation();
+		
+		log.debug("Resultado del Algoritmo FizzBuzz almacenado con éxito.");
 
 	}
 
@@ -178,6 +191,8 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		invocation.setOkInvocations(null);
 
 		fizzbuzzDAO.createInvocations(invocation);
+		
+		log.debug("Resultado del Algoritmo que genera una corrida en estado Error almacenado con éxito.");
 
 	}
 }
