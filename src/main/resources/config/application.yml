@@ -42,7 +42,11 @@ logging:
     
       com:
         intraway: TRACE
-
+springdoc:
+  packagesToScan: com.intraway.fizzbuzz.controller
+  pathsToMatch: /api/**
+  show-actuator: true
+  
 user-constants:
   string:
     multipleOf3: Fizz

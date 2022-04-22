@@ -95,6 +95,12 @@ public class FizzbuzzServicesImpl implements FizzbuzzServices {
 
 			search: {// Genero un bloque para agrupar los condicionales
 
+				if(i % 3 == 0 & i % 5 == 0) {//Evaluo si es multiplo de los dos
+					resultList.add(multipleOf3and5);
+					multiple3 = true;
+					multiple5 = true;
+					break search;
+				}
 				if (i % 3 == 0) {// Evaluo si es multiplo de 3
 					resultList.add(multipleOf3);
 					description = "se encontraron múltiplos de 3";

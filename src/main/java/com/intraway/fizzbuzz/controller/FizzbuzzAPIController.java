@@ -39,7 +39,7 @@ public class FizzbuzzAPIController {
 			 OKFizzbuzzDTO result = fizzbuzzServices.getOkResult(min, max);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}else {//Si min y max no son correctos genero resultado ERROR
-			return new ResponseEntity<>(fizzbuzzServices.getErrorResult("/intraway/api/fizzbuzz/"+min+"/"+max), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(fizzbuzzServices.getErrorResult("/intraway/api/fizzbuzz/"+min+"/"+max), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
