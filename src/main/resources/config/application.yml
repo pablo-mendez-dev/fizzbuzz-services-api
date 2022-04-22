@@ -1,0 +1,50 @@
+spring:
+  data:
+    jpa:
+      repositories:
+        enabled: true
+  datasource:
+    hikari:
+      connection-timeout: 10000
+      validation-timeout: 10000
+      maximum-pool-size: 15
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/fizzbuzz?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: admin1234
+    tomcat:
+      test-while-idle: true
+      validation-query: SELECT 1
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+    show-sql: false
+    
+server:
+  servlet:
+    context-path: /intraway
+  port : 8080
+
+logging:
+#  config: ./config/logback.xml
+  level:
+    org:
+      springframework:
+        web: INFO
+      hibernate:
+        engine:
+          jdbc:
+            spi:
+              SqlExceptionHelper: ERROR
+    
+      com:
+        intraway: TRACE
+
+user-constants:
+  string:
+    multipleOf3: Fizz
+    multipleOf5: Buzz
+    multipleOf3and5: FizzBuzz
