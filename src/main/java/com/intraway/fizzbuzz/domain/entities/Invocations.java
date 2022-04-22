@@ -1,15 +1,18 @@
 package com.intraway.fizzbuzz.domain.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity(name="invocations")
 public class Invocations implements Serializable {
@@ -20,13 +23,13 @@ public class Invocations implements Serializable {
     @Column(name="id_invocation", unique=true, nullable=false, precision=10)
     private int idInvocation;
     @Column(name="created_time", nullable=false)
-    private LocalDateTime createdTime;
+    private Timestamp  createdTime;
     @Column(name="path", nullable=false, length=45)
     private String path;
     @Column(name="state", nullable=false, length=1)
     private boolean state;
-    @OneToMany(mappedBy="invocations")
-    private Set<OkInvocations> okInvocations;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE},mappedBy="invocations")
+    private OkInvocations okInvocations;
 
     /**
      * GET idInvocation.
@@ -51,7 +54,7 @@ public class Invocations implements Serializable {
      *
      * @return valor actual de createdTime
      */
-    public LocalDateTime getCreatedTime() {
+    public Timestamp getCreatedTime() {
         return createdTime;
     }
 
@@ -60,7 +63,7 @@ public class Invocations implements Serializable {
      *
      * @param valor de createdTime
      */
-    public void setCreatedTime(LocalDateTime aCreatedTime) {
+    public void setCreatedTime(Timestamp aCreatedTime) {
         createdTime = aCreatedTime;
     }
 
@@ -105,7 +108,7 @@ public class Invocations implements Serializable {
      *
      * @return valor actual de okInvocations
      */
-    public Set<OkInvocations> getOkInvocations() {
+    public OkInvocations getOkInvocations() {
         return okInvocations;
     }
 
@@ -114,7 +117,7 @@ public class Invocations implements Serializable {
      *
      * @param valor de okInvocations
      */
-    public void setOkInvocations(Set<OkInvocations> aOkInvocations) {
+    public void setOkInvocations(OkInvocations aOkInvocations) {
         okInvocations = aOkInvocations;
     }
 

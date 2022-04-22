@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.intraway.fizzbuzz.domain.dto.OKFizzbuzzDTO;
-import com.intraway.fizzbuzz.services.FizzbuzzServices;
+import com.intraway.fizzbuzz.services.business.FizzbuzzBusinessServices;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,10 +22,10 @@ import lombok.extern.slf4j.Slf4j;
 public class FizzbuzzAPIController {
 
 	@Autowired
-	FizzbuzzServices fizzbuzzServices;
+	FizzbuzzBusinessServices fizzbuzzServices;
 	
 	@Autowired
-	public FizzbuzzAPIController(FizzbuzzServices aFizzbuzzServices) {
+	public FizzbuzzAPIController(FizzbuzzBusinessServices aFizzbuzzServices) {
 		fizzbuzzServices = aFizzbuzzServices;
 	}
 	
@@ -36,7 +36,7 @@ public class FizzbuzzAPIController {
 		boolean okValues = fizzbuzzServices.validateMinMax(min, max);//Verifico que los valores de min y max sean validos
 		
 		if(okValues) {//Si min y max son validos entonces genero resultado OK
-			 OKFizzbuzzDTO result = fizzbuzzServices.getOkResult(min, max);
+			 OKFizzbuzzDTO result = fizzbuzzServices.getOkResult(min, max, "/intraway/api/fizzbuzz/"+min+"/"+max);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}else {//Si min y max no son correctos genero resultado ERROR
 			return new ResponseEntity<>(fizzbuzzServices.getErrorResult("/intraway/api/fizzbuzz/"+min+"/"+max), HttpStatus.BAD_REQUEST);

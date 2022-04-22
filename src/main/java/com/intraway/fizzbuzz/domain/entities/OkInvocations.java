@@ -1,16 +1,17 @@
 package com.intraway.fizzbuzz.domain.entities;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity(name="ok_invocations")
 public class OkInvocations implements Serializable {
@@ -24,11 +25,11 @@ public class OkInvocations implements Serializable {
     private String code;
     @Column(name="description", nullable=false, length=100)
     private String description;
-    @ManyToOne(optional=false)
+    @OneToOne(optional=false)
     @JoinColumn(name="fk_id_invocation", nullable=false)
     private Invocations invocations;
-    @OneToMany(mappedBy="okInvocations")
-    private Set<Results> results;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE}, mappedBy="okInvocations")
+    private List<Results> results;
 
 
     /**
@@ -108,7 +109,7 @@ public class OkInvocations implements Serializable {
      *
      * @return valor actual de results
      */
-    public Set<Results> getResults() {
+    public List<Results> getResults() {
         return results;
     }
 
@@ -117,7 +118,7 @@ public class OkInvocations implements Serializable {
      *
      * @param valor de results
      */
-    public void setResults(Set<Results> aResults) {
+    public void setResults(List<Results> aResults) {
         results = aResults;
     }
 

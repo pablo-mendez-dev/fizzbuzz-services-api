@@ -1,10 +1,10 @@
-package com.intraway.fizzbuzz.services;
+package com.intraway.fizzbuzz.services.business;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +13,10 @@ import com.intraway.fizzbuzz.domain.dto.OKFizzbuzzDTO;
 import com.intraway.fizzbuzz.domain.entities.Invocations;
 import com.intraway.fizzbuzz.domain.entities.OkInvocations;
 import com.intraway.fizzbuzz.domain.entities.Results;
-import com.intraway.fizzbuzz.domain.repository.InvocationsRepository;
-import com.intraway.fizzbuzz.domain.repository.OkInvocationsRepository;
-import com.intraway.fizzbuzz.domain.repository.ResultsRepository;
+import com.intraway.fizzbuzz.services.dao.FizzbuzzDAO;
 
 @Service
-public class FizzbuzzServicesImpl implements FizzbuzzServices {
-
-	protected final InvocationsRepository invocationsRepository;
-	protected final OkInvocationsRepository okInvocationsRepository;
-	protected final ResultsRepository resultsRepository;
+public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 	@Value("${user-constants.string.multipleOf3}")
 	private String multipleOf3;
@@ -31,35 +25,11 @@ public class FizzbuzzServicesImpl implements FizzbuzzServices {
 	@Value("${user-constants.string.multipleOf3and5}")
 	private String multipleOf3and5;
 
-	public FizzbuzzServicesImpl(InvocationsRepository aInvocationsRepository,
-			OkInvocationsRepository aOkInvocationsRepository, ResultsRepository aResultsRepository) {
+	@Autowired
+	protected final FizzbuzzDAO fizzbuzzDAO;
 
-		invocationsRepository = aInvocationsRepository;
-		okInvocationsRepository = aOkInvocationsRepository;
-		resultsRepository = aResultsRepository;
-	}
-
-	@Override
-	public void createInvocations(Invocations invocation) {
-		invocationsRepository.save(invocation);
-
-	}
-
-	@Override
-	public void createOkInvocations(OkInvocations okInvocation) {
-		okInvocationsRepository.save(okInvocation);
-
-	}
-
-	@Override
-	public void createResults(Results result) {
-		resultsRepository.save(result);
-
-	}
-
-	@Override
-	public Collection<Invocations> getAllInvocations() {
-		return invocationsRepository.findAll();
+	public FizzbuzzBusinessServicesImpl(FizzbuzzDAO aFizzbuzzDAO) {
+		fizzbuzzDAO = aFizzbuzzDAO;
 	}
 
 	@Override
@@ -81,7 +51,7 @@ public class FizzbuzzServicesImpl implements FizzbuzzServices {
 	}
 
 	@Override
-	public OKFizzbuzzDTO getOkResult(String min, String max) {
+	public OKFizzbuzzDTO getOkResult(String min, String max, String path) {
 
 		OKFizzbuzzDTO result = new OKFizzbuzzDTO();// Creo un new OKFizzbuzzDTO porque ya estan validados min y max
 
@@ -93,9 +63,11 @@ public class FizzbuzzServicesImpl implements FizzbuzzServices {
 
 		for (int i = Integer.parseInt(min); i <= Integer.parseInt(max); i++) {
 
-			search: {// Genero un bloque para agrupar los condicionales
+			search: {// Genero un bloque para agrupar los condicionales y de esta forma evito los
+						// else, ya que al evaluar en verdadero un if no se evaluan los restantes ya que
+						// esta el break del bloque dentro del cuerpo del condicional
 
-				if(i % 3 == 0 & i % 5 == 0) {//Evaluo si es multiplo de los dos
+				if (i % 3 == 0 & i % 5 == 0) {// Evaluo si es multiplo de los dos
 					resultList.add(multipleOf3and5);
 					multiple3 = true;
 					multiple5 = true;
@@ -106,7 +78,8 @@ public class FizzbuzzServicesImpl implements FizzbuzzServices {
 					description = "se encontraron múltiplos de 3";
 					multiple3 = true;
 					break search;
-				} else if (i % 5 == 0) {// Evaluo si es multiplo de 5
+				}
+				if (i % 5 == 0) {// Evaluo si es multiplo de 5
 					resultList.add(multipleOf5);
 					description = "se encontraron múltiplos de 5";
 					multiple5 = true;
@@ -117,12 +90,17 @@ public class FizzbuzzServicesImpl implements FizzbuzzServices {
 
 		}
 
-		if(multiple3 & multiple5) { description = "se encontraron múltiplos de 3 y de 5";}
-		
+		if (multiple3 & multiple5) {
+			description = "se encontraron múltiplos de 3 y de 5";
+		}
+
 		result.setCode("CODE??");
 		result.setDescription(description);
 		result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
+		result.setPath(path);
 		result.setList(String.join(",", resultList));
+
+		persist(result, resultList);
 
 		return result;
 	}
@@ -131,7 +109,7 @@ public class FizzbuzzServicesImpl implements FizzbuzzServices {
 	public ERRORFizzbuzzDTO getErrorResult(String path) {
 
 		ERRORFizzbuzzDTO result = new ERRORFizzbuzzDTO();
-		
+
 		result.setError("Bad Request");
 		result.setException("com.intraway.exceptions.badrequest");
 		result.setMessage("Los parámetros enviados son incorrectos");
@@ -140,6 +118,37 @@ public class FizzbuzzServicesImpl implements FizzbuzzServices {
 		result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
 
 		return result;
+	}
+
+	public void persist(OKFizzbuzzDTO okResult, List<String> aResultList) {
+
+		OkInvocations okInvocation = new OkInvocations();
+		okInvocation.setCode(okResult.getCode());
+		okInvocation.setDescription(okResult.getDescription());
+		
+		List<Results> resultList = new ArrayList<Results>();
+		Results result;
+		for (String aResult : aResultList) {
+			result = new Results();
+			result.setValue(aResult);
+			result.setOkInvocations(okInvocation);
+			resultList.add(result);
+		}
+
+		
+	
+		okInvocation.setResults(resultList);
+		
+		Invocations invocation = new Invocations();
+		invocation.setCreatedTime(new Timestamp(System.currentTimeMillis()));
+		invocation.setPath(okResult.getPath());
+		invocation.setState(true);
+		invocation.setOkInvocations(okInvocation);
+		
+		okInvocation.setInvocations(invocation);
+		
+		fizzbuzzDAO.createInvocations(invocation);
+
 	}
 
 }
