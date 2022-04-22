@@ -18,6 +18,7 @@ import com.intraway.fizzbuzz.services.dao.FizzbuzzDAO;
 @Service
 public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
+	// Inyecto los valores de constantes configuradas en el archivo de configuracion
 	@Value("${user-constants.string.multipleOf3}")
 	private String multipleOf3;
 	@Value("${user-constants.string.multipleOf5}")
@@ -58,6 +59,9 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		List<String> resultList = new ArrayList<String>();// Lista para almacenar los resultados
 
 		String description = "no se encontraron múltiplos de 3 ni de 5";
+
+		// Estas variable boolean permiten identificar que tipos de enteros hay y si
+		// cumplen con las condiciones buscadas para tener una asignacion fizz o buzz
 		boolean multiple3 = false;
 		boolean multiple5 = false;
 
@@ -88,12 +92,11 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 		}
 
-		
-		if (multiple3 & multiple5) {//Si existen multiplos de los dos
+		if (multiple3 & multiple5) {// Si existen multiplos de los dos
 			description = "se encontraron múltiplos de 3 y de 5";
-		}else if(multiple3) {//No existen multiplos de los dos, pregunto si existen de 3
+		} else if (multiple3) {// No existen multiplos de los dos, pregunto si existen de 3
 			description = "se encontraron múltiplos de 3";
-		}else if(multiple5) {//No existen multiplos de los dos ni de 3, pregunto si existen de 5
+		} else if (multiple5) {// No existen multiplos de los dos ni de 3, pregunto si existen de 5
 			description = "se encontraron múltiplos de 5";
 		}
 
@@ -103,7 +106,7 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		result.setPath(path);
 		result.setList(String.join(",", resultList));
 
-		persist(result, resultList);
+		persistOkResult(result, resultList);
 
 		return result;
 	}
@@ -119,13 +122,13 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		result.setPath(path);
 		result.setStatus(400);
 		result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
-		
-		//TODO: Persistir el estado ERROR
+
+		persistErrorResult(path);
 
 		return result;
 	}
 
-	private void persist(OKFizzbuzzDTO okResult, List<String> aResultList) {
+	private void persistOkResult(OKFizzbuzzDTO okResult, List<String> aResultList) {
 
 		OkInvocations okInvocation = new OkInvocations();
 		okInvocation.setCode(okResult.getCode());
@@ -143,7 +146,7 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		okInvocation.setResults(resultList);
 
 		Invocations invocation = new Invocations();
-		invocation.setCreatedTime(new Timestamp(System.currentTimeMillis()));//TODO: cambiar este timestamp
+		invocation.setCreatedTime(new Timestamp(System.currentTimeMillis()));// TODO: cambiar este timestamp
 		invocation.setPath(okResult.getPath());
 		invocation.setState(true);
 		invocation.setOkInvocations(okInvocation);
@@ -154,4 +157,15 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 	}
 
+	private void persistErrorResult(String path) {
+
+		Invocations invocation = new Invocations();
+		invocation.setCreatedTime(new Timestamp(System.currentTimeMillis()));// TODO: cambiar este timestamp
+		invocation.setPath(path);
+		invocation.setState(false);
+		invocation.setOkInvocations(null);
+
+		fizzbuzzDAO.createInvocations(invocation);
+
+	}
 }
