@@ -2,6 +2,7 @@ package com.intraway.fizzbuzz.services.business;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,8 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 	@Override
 	public ERRORFizzbuzzDTO getErrorResult(String path) {
 
+		log.debug("Comienza creacion de respuesta con Error");
+
 		ERRORFizzbuzzDTO result = new ERRORFizzbuzzDTO();
 
 		try {
@@ -81,10 +84,65 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 			persistErrorResult(path);
 
 		} catch (Exception e) {
+			log.debug("ERROR: " + e.getMessage());
 			throw new AppBussinesException("RUNTIME-ERROR: ", e.getMessage());
 		}
 
+		log.debug("Termina creacion de respuesta con Error");
+
 		return result;
+	}
+
+	@Override
+	public List<OKFizzbuzzDTO> getAllOkResult() {
+
+		Collection<Invocations> invocationsList = fizzbuzzDAO.getAllInvocationsByState(true);
+
+		List<OKFizzbuzzDTO> okFizzbuzzDTOList = new ArrayList<OKFizzbuzzDTO>();
+		List<String> resultList;
+		OKFizzbuzzDTO okBizzbuzzDTO;
+
+		for (Invocations invocation : invocationsList) {
+
+			okBizzbuzzDTO = new OKFizzbuzzDTO();
+			resultList = new ArrayList<String>();
+
+			okBizzbuzzDTO.setCode(invocation.getOkInvocations().getCode());
+			okBizzbuzzDTO.setDescription(invocation.getOkInvocations().getDescription());
+			okBizzbuzzDTO.setPath(invocation.getPath());
+			okBizzbuzzDTO.setTimestamp("" + invocation.getCreatedTime().getTime());
+
+			for (Results result : invocation.getOkInvocations().getResults()) {
+				resultList.add(result.getValue());
+			}
+
+			okBizzbuzzDTO.setList(String.join(",", resultList));
+
+			okFizzbuzzDTOList.add(okBizzbuzzDTO);
+		}
+
+		return okFizzbuzzDTOList;
+	}
+
+	@Override
+	public List<ERRORFizzbuzzDTO> getAllErrorResult() {
+		Collection<Invocations> invocationsList = fizzbuzzDAO.getAllInvocationsByState(false);
+
+		List<ERRORFizzbuzzDTO> errorFizzbuzzDTOList = new ArrayList<ERRORFizzbuzzDTO>();
+		ERRORFizzbuzzDTO errorFizzbuzzDTO;
+
+		for (Invocations invocation : invocationsList) {
+			errorFizzbuzzDTO = new ERRORFizzbuzzDTO();
+			errorFizzbuzzDTO.setError("Bad Request");
+			errorFizzbuzzDTO.setException("com.intraway.exceptions.badrequest");
+			errorFizzbuzzDTO.setMessage("Los parámetros enviados son incorrectos");
+			errorFizzbuzzDTO.setPath(invocation.getPath());
+			errorFizzbuzzDTO.setStatus(400);
+			errorFizzbuzzDTO.setTimestamp("" + invocation.getCreatedTime().getTime());
+			errorFizzbuzzDTOList.add(errorFizzbuzzDTO);
+		}
+
+		return errorFizzbuzzDTOList;
 	}
 
 	private OKFizzbuzzDTO searchFizzBuzz(String min, String max, String path) {
@@ -145,9 +203,9 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 			log.debug("ERROR: " + e.getMessage());
 			throw new AppBussinesException("RUNTIME-ERROR: ", e.getMessage());
 		}
-		
+
 		log.debug("Termina ejecución algoritmo de búsqueda de FizzBuzz");
-		
+
 		return result;
 	}
 
@@ -177,8 +235,8 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		okInvocation.setInvocations(invocation);
 
 		fizzbuzzDAO.createInvocations(invocation);
-		
-		log.debug("Resultado del Algoritmo FizzBuzz almacenado con éxito.");
+
+		log.debug("Resultado del Algoritmo FizzBuzz almacenado con éxito");
 
 	}
 
@@ -191,8 +249,9 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		invocation.setOkInvocations(null);
 
 		fizzbuzzDAO.createInvocations(invocation);
-		
-		log.debug("Resultado del Algoritmo que genera una corrida en estado Error almacenado con éxito.");
+
+		log.debug("Resultado del Algoritmo que genera una corrida en estado Error almacenado con éxito");
 
 	}
+
 }

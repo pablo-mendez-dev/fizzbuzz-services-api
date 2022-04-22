@@ -13,41 +13,46 @@ import org.springframework.web.bind.annotation.RestController;
 import com.intraway.fizzbuzz.domain.dto.OKFizzbuzzDTO;
 import com.intraway.fizzbuzz.services.business.FizzbuzzBusinessServices;
 
-import lombok.extern.slf4j.Slf4j;
-
 @CrossOrigin
 @RestController("api")
-@Slf4j
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FizzbuzzAPIController {
 
 	@Autowired
 	FizzbuzzBusinessServices fizzbuzzServices;
-	
+
 	@Autowired
 	public FizzbuzzAPIController(FizzbuzzBusinessServices aFizzbuzzServices) {
 		fizzbuzzServices = aFizzbuzzServices;
 	}
-	
-	
+
 	@GetMapping(value = "/fizzbuzz/{min}/{max}")
 	public ResponseEntity<Object> getFizzbuzz(@PathVariable("min") String min, @PathVariable("max") String max) {
-		
-		boolean okValues = fizzbuzzServices.validateMinMax(min, max);//Verifico que los valores de min y max sean validos
-		
-		if(okValues) {//Si min y max son validos entonces genero resultado OK
-			 OKFizzbuzzDTO result = fizzbuzzServices.getOkResult(min, max, "/intraway/api/fizzbuzz/"+min+"/"+max);
+
+		boolean okValues = fizzbuzzServices.validateMinMax(min, max);// Verifico que los valores de min y max sean
+																		// validos
+
+		if (okValues) {// Si min y max son validos entonces genero resultado OK
+			OKFizzbuzzDTO result = fizzbuzzServices.getOkResult(min, max, "/intraway/api/fizzbuzz/" + min + "/" + max);
 			return new ResponseEntity<>(result, HttpStatus.OK);
-		}else {//Si min y max no son correctos genero resultado ERROR
-			return new ResponseEntity<>(fizzbuzzServices.getErrorResult("/intraway/api/fizzbuzz/"+min+"/"+max), HttpStatus.BAD_REQUEST);
+		} else {// Si min y max no son correctos genero resultado ERROR
+			return new ResponseEntity<>(fizzbuzzServices.getErrorResult("/intraway/api/fizzbuzz/" + min + "/" + max),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	
-//	@GetMapping(value = "/fizzbuzz/getAll")
-//	public ResponseEntity<Object> getAllFizzBuzz(){
-//		
-//		
-//	}
-//	
+
+	@GetMapping(value = "/fizzbuzz/getAllOkResults")
+	public ResponseEntity<Object> getAllOkResults() {
+
+		return new ResponseEntity<>(fizzbuzzServices.getAllOkResult(), HttpStatus.OK);
+
+	}
+
+	@GetMapping(value = "/fizzbuzz/getAllErrorResult")
+	public ResponseEntity<Object> getAllErrorResult() {
+
+		return new ResponseEntity<>(fizzbuzzServices.getAllErrorResult(), HttpStatus.OK);
+
+	}
+
 }

@@ -10,11 +10,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 public class FizzbuzzServicesApiManagerConfiguration {
 
 	@Bean
-	  public GroupedOpenApi publicFizzbuzzServicesApi() {
-	      return GroupedOpenApi.builder()
-	              .group("intraway-fizzbuzz")
-	              .pathsToMatch("/api/")
-	              .build();
-	  }
+	public GroupedOpenApi publicFizzbuzzServicesApi() {
+		return GroupedOpenApi.builder().group("intraway-fizzbuzz").pathsToMatch("/api/").build();
+	}
 
 }

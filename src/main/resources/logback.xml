@@ -2,7 +2,7 @@
 <!DOCTYPE xml>
 <configuration>
 
-  <property name="LOGS" value="/Usuarios/usuario1/uyDot/Proyectos/Services/fizzbuzz-logs"/>
+  <property name="LOGS" value="C:/aplicaciones_log/java/server/fizzbuzz-logs"/>
   <property name="NAME" value="fizzbuzz"/>
   <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>

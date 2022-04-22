@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.intraway.fizzbuzz.domain.entities.OkInvocations;
 
-public interface OkInvocationsRepository extends  JpaRepository<OkInvocations, Integer>{
+public interface OkInvocationsRepository extends JpaRepository<OkInvocations, Integer> {
 
 }

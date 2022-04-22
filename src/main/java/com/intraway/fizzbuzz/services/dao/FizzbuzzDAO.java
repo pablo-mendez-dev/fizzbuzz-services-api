@@ -15,4 +15,6 @@ public interface FizzbuzzDAO {
 	public abstract void createResults(Results result);
 
 	public Collection<Invocations> getAllInvocations();
+
+	public Collection<Invocations> getAllInvocationsByState(boolean state);
 }

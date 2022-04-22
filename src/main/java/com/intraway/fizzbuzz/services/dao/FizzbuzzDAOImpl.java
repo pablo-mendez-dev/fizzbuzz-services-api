@@ -49,4 +49,9 @@ public class FizzbuzzDAOImpl implements FizzbuzzDAO {
 		return invocationsRepository.findAll();
 	}
 
+	@Override
+	public Collection<Invocations> getAllInvocationsByState(boolean state) {
+		return invocationsRepository.getAllInvocationsByState(state);
+	}
+
 }
