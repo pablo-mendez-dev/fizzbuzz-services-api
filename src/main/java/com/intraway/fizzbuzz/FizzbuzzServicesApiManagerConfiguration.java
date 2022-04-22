@@ -9,6 +9,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class FizzbuzzServicesApiManagerConfiguration {
 
+	/*
+	 * Configuracion de swagger
+	 */
 	@Bean
 	public GroupedOpenApi publicFizzbuzzServicesApi() {
 		return GroupedOpenApi.builder().group("intraway-fizzbuzz").pathsToMatch("/api/").build();
