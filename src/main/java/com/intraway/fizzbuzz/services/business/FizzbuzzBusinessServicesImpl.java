@@ -75,13 +75,11 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 				}
 				if (i % 3 == 0) {// Evaluo si es multiplo de 3
 					resultList.add(multipleOf3);
-					description = "se encontraron múltiplos de 3";
 					multiple3 = true;
 					break search;
 				}
 				if (i % 5 == 0) {// Evaluo si es multiplo de 5
 					resultList.add(multipleOf5);
-					description = "se encontraron múltiplos de 5";
 					multiple5 = true;
 					break search;
 				}
@@ -90,8 +88,13 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 		}
 
-		if (multiple3 & multiple5) {
+		
+		if (multiple3 & multiple5) {//Si existen multiplos de los dos
 			description = "se encontraron múltiplos de 3 y de 5";
+		}else if(multiple3) {//No existen multiplos de los dos, pregunto si existen de 3
+			description = "se encontraron múltiplos de 3";
+		}else if(multiple5) {//No existen multiplos de los dos ni de 3, pregunto si existen de 5
+			description = "se encontraron múltiplos de 5";
 		}
 
 		result.setCode("CODE??");
