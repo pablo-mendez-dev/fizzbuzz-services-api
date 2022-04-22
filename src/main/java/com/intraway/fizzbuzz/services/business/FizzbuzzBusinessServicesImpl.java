@@ -13,6 +13,7 @@ import com.intraway.fizzbuzz.domain.dto.OKFizzbuzzDTO;
 import com.intraway.fizzbuzz.domain.entities.Invocations;
 import com.intraway.fizzbuzz.domain.entities.OkInvocations;
 import com.intraway.fizzbuzz.domain.entities.Results;
+import com.intraway.fizzbuzz.exceptions.AppBussinesException;
 import com.intraway.fizzbuzz.services.dao.FizzbuzzDAO;
 
 @Service
@@ -65,48 +66,52 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		boolean multiple3 = false;
 		boolean multiple5 = false;
 
-		for (int i = Integer.parseInt(min); i <= Integer.parseInt(max); i++) {
+		try {
+			for (int i = Integer.parseInt(min); i <= Integer.parseInt(max); i++) {
 
-			search: {// Genero un bloque para agrupar los condicionales y de esta forma evito los
-						// else, ya que al evaluar en verdadero un if no se evaluan los restantes ya que
-						// esta el break del bloque dentro del cuerpo del condicional
+				search: {// Genero un bloque para agrupar los condicionales y de esta forma evito los
+							// else, ya que al evaluar en verdadero un if no se evaluan los restantes ya que
+							// esta el break del bloque dentro del cuerpo del condicional
 
-				if (i % 3 == 0 & i % 5 == 0) {// Evaluo si es multiplo de los dos
-					resultList.add(multipleOf3and5);
-					multiple3 = true;
-					multiple5 = true;
-					break search;
+					if (i % 3 == 0 & i % 5 == 0) {// Evaluo si es multiplo de los dos
+						resultList.add(multipleOf3and5);
+						multiple3 = true;
+						multiple5 = true;
+						break search;
+					}
+					if (i % 3 == 0) {// Evaluo si es multiplo de 3
+						resultList.add(multipleOf3);
+						multiple3 = true;
+						break search;
+					}
+					if (i % 5 == 0) {// Evaluo si es multiplo de 5
+						resultList.add(multipleOf5);
+						multiple5 = true;
+						break search;
+					}
+					resultList.add("" + i);
 				}
-				if (i % 3 == 0) {// Evaluo si es multiplo de 3
-					resultList.add(multipleOf3);
-					multiple3 = true;
-					break search;
-				}
-				if (i % 5 == 0) {// Evaluo si es multiplo de 5
-					resultList.add(multipleOf5);
-					multiple5 = true;
-					break search;
-				}
-				resultList.add("" + i);
+
 			}
 
+			if (multiple3 & multiple5) {// Si existen multiplos de los dos
+				description = "se encontraron múltiplos de 3 y de 5";
+			} else if (multiple3) {// No existen multiplos de los dos, pregunto si existen de 3
+				description = "se encontraron múltiplos de 3";
+			} else if (multiple5) {// No existen multiplos de los dos ni de 3, pregunto si existen de 5
+				description = "se encontraron múltiplos de 5";
+			}
+
+			result.setCode(String.format("%03d", 2));
+			result.setDescription(description);
+			result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
+			result.setPath(path);
+			result.setList(String.join(",", resultList));
+
+			persistOkResult(result, resultList);
+		} catch (Exception e) {
+			throw new AppBussinesException("RUNTIME-ERROR: ", e.getMessage());
 		}
-
-		if (multiple3 & multiple5) {// Si existen multiplos de los dos
-			description = "se encontraron múltiplos de 3 y de 5";
-		} else if (multiple3) {// No existen multiplos de los dos, pregunto si existen de 3
-			description = "se encontraron múltiplos de 3";
-		} else if (multiple5) {// No existen multiplos de los dos ni de 3, pregunto si existen de 5
-			description = "se encontraron múltiplos de 5";
-		}
-
-		result.setCode("CODE??");
-		result.setDescription(description);
-		result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
-		result.setPath(path);
-		result.setList(String.join(",", resultList));
-
-		persistOkResult(result, resultList);
 
 		return result;
 	}
@@ -116,14 +121,19 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 		ERRORFizzbuzzDTO result = new ERRORFizzbuzzDTO();
 
-		result.setError("Bad Request");
-		result.setException("com.intraway.exceptions.badrequest");
-		result.setMessage("Los parámetros enviados son incorrectos");
-		result.setPath(path);
-		result.setStatus(400);
-		result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
+		try {
+			result.setError("Bad Request");
+			result.setException("com.intraway.exceptions.badrequest");
+			result.setMessage("Los parámetros enviados son incorrectos");
+			result.setPath(path);
+			result.setStatus(400);
+			result.setTimestamp("" + new Timestamp(System.currentTimeMillis()).getTime());
 
-		persistErrorResult(path);
+			persistErrorResult(path);
+			
+		} catch (Exception e) {
+			throw new AppBussinesException("RUNTIME-ERROR: ", e.getMessage());
+		}
 
 		return result;
 	}
@@ -146,7 +156,7 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		okInvocation.setResults(resultList);
 
 		Invocations invocation = new Invocations();
-		invocation.setCreatedTime(new Timestamp(System.currentTimeMillis()));// TODO: cambiar este timestamp
+		invocation.setCreatedTime(new Timestamp(Long.parseLong(okResult.getTimestamp())));
 		invocation.setPath(okResult.getPath());
 		invocation.setState(true);
 		invocation.setOkInvocations(okInvocation);
@@ -155,12 +165,14 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 		fizzbuzzDAO.createInvocations(invocation);
 
+		invocation.getIdInvocation();
+
 	}
 
 	private void persistErrorResult(String path) {
 
 		Invocations invocation = new Invocations();
-		invocation.setCreatedTime(new Timestamp(System.currentTimeMillis()));// TODO: cambiar este timestamp
+		invocation.setCreatedTime(new Timestamp(System.currentTimeMillis()));
 		invocation.setPath(path);
 		invocation.setState(false);
 		invocation.setOkInvocations(null);
