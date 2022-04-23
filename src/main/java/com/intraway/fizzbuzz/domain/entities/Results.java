@@ -21,8 +21,8 @@ public class Results implements Serializable {
 	@Column(name = "value", nullable = false, length = 8)
 	private String value;
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "fk_id_ok_invocations", nullable = false)
-	private OkInvocations okInvocations;
+	@JoinColumn(name = "fk_id_ok_invocation", nullable = false)
+	private OkInvocations okInvocation;
 
 	/**
 	 * GET idResult.
@@ -65,8 +65,8 @@ public class Results implements Serializable {
 	 *
 	 * @return valor actual de okInvocations
 	 */
-	public OkInvocations getOkInvocations() {
-		return okInvocations;
+	public OkInvocations getOkInvocation() {
+		return okInvocation;
 	}
 
 	/**
@@ -74,8 +74,8 @@ public class Results implements Serializable {
 	 *
 	 * @param valor de okInvocations
 	 */
-	public void setOkInvocations(OkInvocations aOkInvocations) {
-		okInvocations = aOkInvocations;
+	public void setOkInvocation(OkInvocations aOkInvocation) {
+		okInvocation = aOkInvocation;
 	}
 
 }

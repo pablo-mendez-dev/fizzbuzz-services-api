@@ -19,13 +19,19 @@ import com.intraway.fizzbuzz.services.business.FizzbuzzBusinessServices;
 public class FizzbuzzAPIController {
 
 	@Autowired
-	FizzbuzzBusinessServices fizzbuzzServices;
+	FizzbuzzBusinessServices fizzbuzzServices;//Injection del servicio FizzbuzzBusinessServices
 
 	@Autowired
 	public FizzbuzzAPIController(FizzbuzzBusinessServices aFizzbuzzServices) {
 		fizzbuzzServices = aFizzbuzzServices;
 	}
 
+	/**
+	 * Servicio que devuelve el resultado de ejecutar el algoritmo de FizzBuzz sobre las variables recibidas en el path 
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	@GetMapping(value = "/fizzbuzz/{min}/{max}")
 	public ResponseEntity<Object> getFizzbuzz(@PathVariable("min") String min, @PathVariable("max") String max) {
 

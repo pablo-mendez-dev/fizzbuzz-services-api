@@ -28,7 +28,7 @@ public class OkInvocations implements Serializable {
 	@OneToOne(optional = false)
 	@JoinColumn(name = "fk_id_invocation", nullable = false)
 	private Invocations invocations;
-	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE }, mappedBy = "okInvocations")
+	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE }, mappedBy = "okInvocation")
 	private List<Results> results;
 
 	/**

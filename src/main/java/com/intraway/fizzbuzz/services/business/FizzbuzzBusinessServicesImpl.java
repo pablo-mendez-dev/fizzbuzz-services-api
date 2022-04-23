@@ -47,30 +47,30 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 			Integer.parseInt(min);
 			Integer.parseInt(max);
 		} catch (Exception e) {
-			log.debug("Min y Max inválidos");
+			//log.debug("Min y Max inválidos");
 			return false;
 		}
 
 		// Segundo valido que min es menor que max
 		if (Integer.parseInt(min) <= Integer.parseInt(max)) {
-			log.debug("Min y Max válidos");
+			//log.debug("Min y Max válidos");
 			return true;
 		}
 
-		log.debug("Min y Max inválidos");
+		//log.debug("Min y Max inválidos");
 		return false;
 	}
 
 	@Override
 	public OKFizzbuzzDTO getOkResult(String min, String max, String path) {
-		log.debug("Comienza ejecución de algoritmo FizzBuzz");
+		//log.debug("Comienza ejecución de algoritmo FizzBuzz");
 		return searchFizzBuzz(min, max, path);
 	}
 
 	@Override
 	public ERRORFizzbuzzDTO getErrorResult(String path) {
 
-		log.debug("Comienza creacion de respuesta con Error");
+		//log.debug("Comienza creacion de respuesta con Error");
 
 		ERRORFizzbuzzDTO result = new ERRORFizzbuzzDTO();
 
@@ -85,11 +85,11 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 			persistErrorResult(path);
 
 		} catch (Exception e) {
-			log.debug("ERROR: " + e.getMessage());
+			//log.debug("ERROR: " + e.getMessage());
 			throw new AppBussinesException("RUNTIME-ERROR: ", e.getMessage());
 		}
 
-		log.debug("Termina creacion de respuesta con Error");
+		//log.debug("Termina creacion de respuesta con Error");
 
 		return result;
 	}
@@ -201,11 +201,11 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 			persistOkResult(result, resultList);
 		} catch (Exception e) {
-			log.debug("ERROR: " + e.getMessage());
+			//log.debug("ERROR: " + e.getMessage());
 			throw new AppBussinesException("RUNTIME-ERROR: ", e.getMessage());
 		}
 
-		log.debug("Termina ejecución algoritmo de búsqueda de FizzBuzz");
+		//log.debug("Termina ejecución algoritmo de búsqueda de FizzBuzz");
 
 		return result;
 	}
@@ -221,7 +221,7 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		for (String aResult : aResultList) {
 			result = new Results();
 			result.setValue(aResult);
-			result.setOkInvocations(okInvocation);
+			result.setOkInvocation(okInvocation);
 			resultList.add(result);
 		}
 
@@ -237,7 +237,7 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 		fizzbuzzDAO.createInvocations(invocation);
 
-		log.debug("Resultado del Algoritmo FizzBuzz almacenado con éxito");
+		//log.debug("Resultado del Algoritmo FizzBuzz almacenado con éxito");
 
 	}
 
@@ -251,7 +251,7 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 		fizzbuzzDAO.createInvocations(invocation);
 
-		log.debug("Resultado del Algoritmo que genera una corrida en estado Error almacenado con éxito");
+		//log.debug("Resultado del Algoritmo que genera una corrida en estado Error almacenado con éxito");
 
 	}
 
