@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.intraway.fizzbuzz.domain.dto.ERRORFizzbuzzDTO;
-import com.intraway.fizzbuzz.domain.dto.OKFizzbuzzDTO;
 import com.intraway.fizzbuzz.domain.entities.Invocations;
 import com.intraway.fizzbuzz.domain.entities.OkInvocations;
 import com.intraway.fizzbuzz.domain.entities.Results;
+import com.intraway.fizzbuzz.dto.ERRORFizzbuzzDTO;
+import com.intraway.fizzbuzz.dto.OKFizzbuzzDTO;
 import com.intraway.fizzbuzz.exceptions.AppBussinesException;
 import com.intraway.fizzbuzz.services.dao.FizzbuzzDAO;
 

@@ -2,8 +2,8 @@ package com.intraway.fizzbuzz.services.business;
 
 import java.util.List;
 
-import com.intraway.fizzbuzz.domain.dto.ERRORFizzbuzzDTO;
-import com.intraway.fizzbuzz.domain.dto.OKFizzbuzzDTO;
+import com.intraway.fizzbuzz.dto.ERRORFizzbuzzDTO;
+import com.intraway.fizzbuzz.dto.OKFizzbuzzDTO;
 
 public interface FizzbuzzBusinessServices {
 

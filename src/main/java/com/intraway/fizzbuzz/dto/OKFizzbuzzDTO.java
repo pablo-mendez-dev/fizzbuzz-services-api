@@ -1,4 +1,4 @@
-package com.intraway.fizzbuzz.domain.dto;
+package com.intraway.fizzbuzz.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
