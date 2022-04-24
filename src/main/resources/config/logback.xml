@@ -2,6 +2,7 @@
 <!DOCTYPE xml>
 <configuration>
 
+ <!-- Definicion de los parametros de ubicacion y nombre del archivo generado -->
   <property name="LOGS" value="C:/aplicaciones_log/java/server/fizzbuzz-logs"/>
   <property name="NAME" value="fizzbuzz"/>
   <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
@@ -10,7 +11,7 @@
     </encoder>
   </appender>
 
-
+ <!-- Definicion de los formatos de escritura -->
   <appender name="RollingFile"
             class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${LOGS}/${NAME}.log</file>
@@ -20,16 +21,17 @@
 
     <rollingPolicy
             class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <!-- rollover daily and when the file reaches 10 MegaBytes -->
+      <!-- Rolea el archivo cuando es mayor a  10MB-->
       <fileNamePattern>${LOGS}/archived/${NAME}-%d{yyyy-MM-dd}.%i.zip
       </fileNamePattern>
       <timeBasedFileNamingAndTriggeringPolicy
               class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-        <maxFileSize>100MB</maxFileSize>
+        <maxFileSize>10MB</maxFileSize>
       </timeBasedFileNamingAndTriggeringPolicy>
     </rollingPolicy>
   </appender>
-  <!-- LOG everything at INFO level -->
+  
+  <!-- Nivel de LOG en info-->
   <root level="info">
      <appender-ref ref="RollingFile"/> 
     <appender-ref ref="Console"/>

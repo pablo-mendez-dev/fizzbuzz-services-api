@@ -47,6 +47,10 @@ public class FizzbuzzAPIController {
 		}
 	}
 
+	/**
+	 * Servicio que devuelve la lista de respuestas Ok generadas por el algoritmo FizzBuzz
+	 * @return
+	 */
 	@GetMapping(value = "/fizzbuzz/getAllOkResults")
 	public ResponseEntity<Object> getAllOkResults() {
 
@@ -54,6 +58,10 @@ public class FizzbuzzAPIController {
 
 	}
 
+	/**
+	 * Servicio que devuelve la lista de respuestas de request incorrecto generadas por el algoritmo FizzBuzz
+	 * @return
+	 */
 	@GetMapping(value = "/fizzbuzz/getAllErrorResult")
 	public ResponseEntity<Object> getAllErrorResult() {
 
