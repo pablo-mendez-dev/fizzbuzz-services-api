@@ -58,9 +58,7 @@ Dependencias:
 Existen dependecias de otras librerias las cuales estan definidas en el archivo .pom
 
 
-Build del proyecto
-
-Es necesario tener:
+Para el build del proyecto es necesario tener:
 
 	•	Java JDK 11
 	•	Maven 4.0
