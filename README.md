@@ -78,4 +78,7 @@ Al ejcutar el servicio, es posible realizar Tests manuales desde la interfaz de 
 /intraway/swagger-ui/index.html
 
 
+El sistema utiliza la annotation Lombok @Slf4j, por lo tanto es necesario tener configurado Lombok a nivel del IDE para poder compilar.
+
+
 
