@@ -73,7 +73,7 @@ Comando Maven para ejecutar los Test Unitarios:
 
 $ mvn clean install -Dtests.skip=false
 
-Al ejcutar el servicio, es posible realizar Tests manuales desde la interfaz de Swagger-Unitarios:
+Al ejcutar el servicio, es posible realizar Tests manuales desde la interfaz de Swagger-UI:
 
 /intraway/swagger-ui/index.html
 
