@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
-@Slf4j
 public class FizzbuzzServicesApiApplication {
 
 	/**

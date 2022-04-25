@@ -18,7 +18,7 @@ import com.intraway.fizzbuzz.services.business.FizzbuzzBusinessServices;
  * @author Pablo Mendez
  *
  */
-@CrossOrigin //Anotation utilizada para responder a cualquier peticion sin importar origen
+@CrossOrigin //Annotation utilizada para responder a cualquier peticion sin importar origen
 @RestController("api")
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FizzbuzzAPIController {
