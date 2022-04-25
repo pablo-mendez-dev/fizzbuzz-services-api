@@ -38,7 +38,7 @@ class FizzbuzzServicesApiApplicationTests {
 	 * @throws IOException
 	 */
 	@Test
-	public void fizzBuzzAlgorithmTest() throws IOException {
+	void fizzBuzzAlgorithmTest() throws IOException {
 
 		//Genero dos numeros al azar del 0 al 10 y los paso por parametro al endpoint
 		Random random = new Random();
@@ -65,7 +65,7 @@ class FizzbuzzServicesApiApplicationTests {
 	 * @throws IOException
 	 */
 	@Test
-	public void validateResponseContentTypeIsJsonTest()
+	void validateResponseContentTypeIsJsonTest()
 	  throws ClientProtocolException, IOException {
 	 
 	   // Given

@@ -1,5 +1,10 @@
 package com.intraway.fizzbuzz.exceptions;
 
+/**
+ * Excepcion personalizada que es generada en tiempo de ejecucion
+ * @author Pablo Mendez
+ *
+ */
 public class AppBussinesException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

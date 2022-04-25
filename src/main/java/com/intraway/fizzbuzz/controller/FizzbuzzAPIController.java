@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.intraway.fizzbuzz.dto.OKFizzbuzzDTO;
 import com.intraway.fizzbuzz.services.business.FizzbuzzBusinessServices;
 
-@CrossOrigin
+/**
+ * Controller que implementa los servicios del sistema
+ * @author Pablo Mendez
+ *
+ */
+@CrossOrigin //Anotation utilizada para responder a cualquier peticion sin importar origen
 @RestController("api")
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FizzbuzzAPIController {

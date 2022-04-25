@@ -11,6 +11,7 @@ public class FizzbuzzServicesApiManagerConfiguration {
 
 	/**
 	 * Configuracion para el despliegue de Swagger-ui
+	 * @author Pablo Mendez
 	 * 
 	 */
 	@Bean

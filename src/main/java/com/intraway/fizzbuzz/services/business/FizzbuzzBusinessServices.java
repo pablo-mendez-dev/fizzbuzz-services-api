@@ -5,6 +5,11 @@ import java.util.List;
 import com.intraway.fizzbuzz.dto.ERRORFizzbuzzDTO;
 import com.intraway.fizzbuzz.dto.OKFizzbuzzDTO;
 
+/**
+ * Interfaz de servicios que tienen la logica del negocio de la aplicacion
+ * @author Pablo Mendez
+ *
+ */
 public interface FizzbuzzBusinessServices {
 
 	public boolean validateMinMax(String min, String max);

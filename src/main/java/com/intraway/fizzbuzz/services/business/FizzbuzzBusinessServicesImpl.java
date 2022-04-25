@@ -20,6 +20,11 @@ import com.intraway.fizzbuzz.services.dao.FizzbuzzDAO;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Servicio que implementa la interfaz que expone los metodos para la logica de negocio de la aplicacion
+ * @author Pablo Mendez
+ *
+ */
 @Service
 @Slf4j
 public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
@@ -39,6 +44,9 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		fizzbuzzDAO = aFizzbuzzDAO;
 	}
 
+	/**
+	 * Metodo que valida que Min sea efectivamente menor o igual a Max
+	 */
 	@Override
 	public boolean validateMinMax(String min, String max) {
 
@@ -61,12 +69,18 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		return false;
 	}
 
+	/**
+	 * Metodo que ejecuta la logica de la busqueda de los valores enteros entre Min y Max
+	 */
 	@Override
 	public OKFizzbuzzDTO getOkResult(String min, String max, String path) {
 		//log.debug("Comienza ejecución de algoritmo FizzBuzz");
 		return searchFizzBuzz(min, max, path);
 	}
-
+	
+	/**
+	 * Metodo que devuelve un DTO de error de request
+	 */
 	@Override
 	public ERRORFizzbuzzDTO getErrorResult(String path) {
 
@@ -74,6 +88,7 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 		ERRORFizzbuzzDTO result = new ERRORFizzbuzzDTO();
 
+		//Algunos de los valores asignados al DTO de error son siempre los mismos, por eso se escribe el String determinado
 		try {
 			result.setError("Bad Request");
 			result.setException("com.intraway.exceptions.badrequest");
@@ -94,9 +109,13 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		return result;
 	}
 
+	/**
+	 * Metodo que devuelve todos los resultados alamcenados para los request correctos
+	 */
 	@Override
 	public List<OKFizzbuzzDTO> getAllOkResult() {
 
+		//Busqueda de todos las invocaciones con el atributo STATE = true
 		Collection<Invocations> invocationsList = fizzbuzzDAO.getAllInvocationsByState(true);
 
 		List<OKFizzbuzzDTO> okFizzbuzzDTOList = new ArrayList<OKFizzbuzzDTO>();
@@ -125,8 +144,13 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		return okFizzbuzzDTOList;
 	}
 
+	/**
+	 * Metodo que devuelve todos los resultados alamcenados para los request incorrectos
+	 */
 	@Override
 	public List<ERRORFizzbuzzDTO> getAllErrorResult() {
+		
+		//Busqueda de todos las invocaciones con el atributo STATE = false
 		Collection<Invocations> invocationsList = fizzbuzzDAO.getAllInvocationsByState(false);
 
 		List<ERRORFizzbuzzDTO> errorFizzbuzzDTOList = new ArrayList<ERRORFizzbuzzDTO>();
@@ -146,6 +170,13 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		return errorFizzbuzzDTOList;
 	}
 
+	/**
+	 * Metodo que ejecuta el algoritmo de BizzBuzz para un request correcto
+	 * @param min
+	 * @param max
+	 * @param path
+	 * @return OKFizzbuzzDTO
+	 */
 	private OKFizzbuzzDTO searchFizzBuzz(String min, String max, String path) {
 		OKFizzbuzzDTO result = new OKFizzbuzzDTO();// Creo un new OKFizzbuzzDTO porque ya estan validados min y max
 
@@ -210,6 +241,11 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 		return result;
 	}
 
+	/**
+	 * Persistencia de las invocaciones de un request correcto 
+	 * @param okResult
+	 * @param aResultList
+	 */
 	private void persistOkResult(OKFizzbuzzDTO okResult, List<String> aResultList) {
 
 		OkInvocations okInvocation = new OkInvocations();
@@ -241,6 +277,10 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 	}
 
+	/**
+	 * Persistencia de las invocaciones de un request incorrecto 
+	 * @param path
+	 */
 	private void persistErrorResult(String path) {
 
 		Invocations invocation = new Invocations();
@@ -255,6 +295,10 @@ public class FizzbuzzBusinessServicesImpl implements FizzbuzzBusinessServices {
 
 	}
 
+	/**
+	 * Metodo que devuelve un String que representa un numero entero del 0 al 999
+	 * @return String
+	 */
 	private String getRandomIntNumber() {	  
 	    Random random = new Random();
 	    int number = random.nextInt(999);

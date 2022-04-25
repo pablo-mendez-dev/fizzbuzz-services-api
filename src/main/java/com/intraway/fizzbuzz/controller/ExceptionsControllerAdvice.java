@@ -14,6 +14,7 @@ public class ExceptionsControllerAdvice {
 	 * ExceptionHandler de la excepcion personalizada AppBussinesException
 	 * @param AppBussinesException
 	 * @return ResponseEntity
+	 * @author Pablo Mendez
 	 * 
 	 */
 	@ExceptionHandler(AppBussinesException.class)

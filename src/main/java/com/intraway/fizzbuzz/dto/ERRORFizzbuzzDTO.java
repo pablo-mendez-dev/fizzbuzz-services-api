@@ -6,6 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Objeto DTO utilizado en la respuesta de una invocacion con request incorrecto
+ * @author Pablo Mendez
+ *
+ */
 @Getter
 @Setter
 @ToString
