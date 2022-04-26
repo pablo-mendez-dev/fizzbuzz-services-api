@@ -48,15 +48,17 @@ Para obtener todos los resultados de request incorrectos:
 
 intraway/api/fizzbuzz/getAllErrorResult
 
-Requerimientos:
+## Requerimientos
 
 	•	Spring Boot 2.6.7 o mayor
 	•	MySQL Server 8
 
-Dependencias:
+## Dependencias
 
 Existen dependecias de otras librerias las cuales estan definidas en el archivo .pom
+El sistema utiliza la annotation Lombok @Slf4j, por lo tanto es necesario tener configurado Lombok a nivel del IDE para poder compilar.
 
+## Build
 
 Para el build del proyecto es necesario tener:
 
@@ -77,7 +79,7 @@ Al ejcutar el servicio, es posible realizar Tests manuales desde la interfaz de 
 /intraway/swagger-ui/index.html
 
 
-El sistema utiliza la annotation Lombok @Slf4j, por lo tanto es necesario tener configurado Lombok a nivel del IDE para poder compilar.
+
 
 
 
